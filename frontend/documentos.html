@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentos</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <div class="container">
+    <h2>Documentos asignados</h2>
+    <p style="margin-bottom: 24px; color: #6b7280;">Lista completa de documentos asignados en el sistema.</p>
+
+    <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Número</th>
+          <th>Tipo</th>
+          <th>Asignado a</th>
+          <th>Asignado por</th>
+          <th>Fecha</th>
+          <th id="thAcciones" style="display: none;">Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tablaDocumentos">
+        <tr>
+          <td colspan="6" id="loadingRow" style="text-align: center; padding: 40px; color: #6b7280;">
+            <span class="loading loading-dark"></span> Cargando documentos...
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- Modal para editar documento -->
+  <div id="modalEditar" class="modal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Editar Documento</h3>
+        <button class="modal-close" id="cerrarModal">&times;</button>
+      </div>
+      <form id="formEditar">
+        <input type="hidden" id="editIdDocumento">
+        
+        <label>Número de documento</label>
+        <input type="text" id="editNumero" readonly style="background: #f3f4f6;">
+
+        <label>Tipo de documento</label>
+        <input type="text" id="editTipo" readonly style="background: #f3f4f6;">
+
+        <label>Asignar a</label>
+        <select id="editAsignadoA" required>
+          <option value="">Seleccione usuario...</option>
+        </select>
+
+        <div class="modal-buttons">
+          <button type="button" class="btn-cancel" id="cancelarEditar">Cancelar</button>
+          <button type="submit" class="btn-save">Guardar cambios</button>
+        </div>
+      </form>
+      <div id="mensajeEditar"></div>
+    </div>
+  </div>
+
+  <script src="js/navigation.js"></script>
+  <script src="components/navbar.js"></script>
+  <script src="js/documentos.js"></script>
+</body>
+</html>

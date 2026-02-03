@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <div class="container">
+    <h2>Panel principal</h2>
+    <p style="margin-bottom: 24px; color: #6b7280;">Bienvenido <strong id="usuarioNombre"></strong> al sistema de asignación de documentos.</p>
+
+    <h3 style="font-size: 20px; margin-top: 32px; margin-bottom: 16px; color: #374151;">Documentos recientes</h3>
+    
+    <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Número</th>
+          <th>Tipo</th>
+          <th>Asignado a</th>
+          <th>Asignado por</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
+      <tbody id="tablaDocumentos">
+        <tr>
+          <td colspan="5" style="text-align: center; padding: 40px; color: #6b7280;">
+            <span class="loading loading-dark"></span> Cargando documentos...
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <script src="js/navigation.js"></script>
+  <script src="components/navbar.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
