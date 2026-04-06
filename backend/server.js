@@ -4,13 +4,31 @@ const cors = require('cors');
 
 const app = express();
 
-// Permitir tu frontend de Vercel (y localhost para desarrollo)
+// El header Origin nunca incluye ruta (/login.html): debe ser solo esquema + host (+ puerto).
+// En Railway puedes definir ALLOWED_ORIGINS=https://tu-app.vercel.app,https://otra.com
+const defaultOrigins = [
+  'http://localhost:5500',
+  'http://127.0.0.1:5500',
+  'https://asignacion-documentos.vercel.app'
+];
+const envOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',').map((s) => s.trim()).filter(Boolean)
+  : [];
+const allowedList = [...new Set([...defaultOrigins, ...envOrigins])];
+
 const corsOptions = {
-  origin: [
-    'http://localhost:5500',        // Live Server local
-    'http://127.0.0.1:5500',
-    'https://asignacion-documentos.vercel.app/dashboard.html'     // ← reemplaza con tu URL de Vercel
-  ],
+  origin(origin, callback) {
+    if (!origin) {
+      return callback(null, true);
+    }
+    if (allowedList.includes(origin)) {
+      return callback(null, true);
+    }
+    if (/^https:\/\/[\w.-]+\.vercel\.app$/.test(origin)) {
+      return callback(null, true);
+    }
+    callback(null, false);
+  },
   credentials: true
 };
 
