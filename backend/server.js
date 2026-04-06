@@ -9,7 +9,7 @@ const corsOptions = {
   origin: [
     'http://localhost:5500',        // Live Server local
     'http://127.0.0.1:5500',
-    'https://tu-app.vercel.app'     // ← reemplaza con tu URL de Vercel
+    'https://asignacion-documentos.vercel.app'     // ← reemplaza con tu URL de Vercel
   ],
   credentials: true
 };
