@@ -56,14 +56,23 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  function urlListaDocumentos() {
+  /** Lista completa desde la última petición; el filtro se aplica en el cliente. */
+  let todosLosDocumentos = [];
+
+  function documentosSegunFiltro() {
     const select = document.getElementById('filtroTipoDocumento');
-    const idTipo = select && select.value;
-    let url = `${API_BASE}/api/documentos`;
-    if (idTipo) {
-      url += `?id_tipo_documento=${encodeURIComponent(idTipo)}`;
+    const idSel = select && select.value;
+    if (!idSel) {
+      return todosLosDocumentos;
     }
-    return url;
+    return todosLosDocumentos.filter((d) => {
+      if (d.id_tipo_documento !== undefined && d.id_tipo_documento !== null) {
+        return String(d.id_tipo_documento) === String(idSel);
+      }
+      const opt = select.options[select.selectedIndex];
+      const nombre = opt ? opt.textContent.trim() : '';
+      return nombre && d.tipo_documento === nombre;
+    });
   }
 
   // Cargar usuarios para el select del modal
@@ -207,28 +216,27 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  async function cargarDocumentos() {
-    try {
-      const res = await fetch(urlListaDocumentos());
-      const documentos = await res.json();
+  function renderTablaDocumentos() {
+    const documentos = documentosSegunFiltro();
 
-      const tbody = document.getElementById('tablaDocumentos');
-      if (!tbody) return;
+    const tbody = document.getElementById('tablaDocumentos');
+    if (!tbody) return;
 
-      tbody.innerHTML = '';
+    tbody.innerHTML = '';
 
-      if (documentos.length === 0) {
-        const colspan = esAdmin ? 6 : 5;
-        const filtro = document.getElementById('filtroTipoDocumento');
-        const hayFiltro = filtro && filtro.value;
-        const mensajeVacio = hayFiltro
+    if (documentos.length === 0) {
+      const colspan = esAdmin ? 6 : 5;
+      const filtro = document.getElementById('filtroTipoDocumento');
+      const hayFiltro = filtro && filtro.value;
+      const mensajeVacio =
+        hayFiltro && todosLosDocumentos.length > 0
           ? 'No hay documentos de este tipo'
           : 'No hay documentos asignados aún';
-        tbody.innerHTML = `<tr><td colspan="${colspan}" style="text-align: center; padding: 40px; color: #6b7280;">${mensajeVacio}</td></tr>`;
-        return;
-      }
+      tbody.innerHTML = `<tr><td colspan="${colspan}" style="text-align: center; padding: 40px; color: #6b7280;">${mensajeVacio}</td></tr>`;
+      return;
+    }
 
-      documentos.forEach((d, index) => {
+    documentos.forEach((d, index) => {
         const tr = document.createElement('tr');
         tr.style.animationDelay = `${index * 0.05}s`;
 
@@ -251,8 +259,25 @@ document.addEventListener('DOMContentLoaded', function() {
           ${accionesHTML}
         `;
 
-        tbody.appendChild(tr);
-      });
+      tbody.appendChild(tr);
+    });
+  }
+
+  async function cargarDocumentos() {
+    try {
+      const res = await fetch(`${API_BASE}/api/documentos`);
+      const data = await res.json();
+      todosLosDocumentos = Array.isArray(data) ? data : [];
+      if (!res.ok) {
+        const tbody = document.getElementById('tablaDocumentos');
+        if (tbody) {
+          const colspan = esAdmin ? 6 : 5;
+          const msg = data && data.error ? data.error : 'Error al cargar documentos';
+          tbody.innerHTML = `<tr><td colspan="${colspan}" style="text-align: center; padding: 40px; color: #dc2626;">${msg}</td></tr>`;
+        }
+        return;
+      }
+      renderTablaDocumentos();
     } catch (error) {
       const tbody = document.getElementById('tablaDocumentos');
       if (tbody) {
@@ -266,7 +291,7 @@ document.addEventListener('DOMContentLoaded', function() {
   window.editarDoc = editarDocumento;
   window.eliminarDoc = eliminarDocumento;
 
-  document.getElementById('filtroTipoDocumento')?.addEventListener('change', cargarDocumentos);
+  document.getElementById('filtroTipoDocumento')?.addEventListener('change', renderTablaDocumentos);
 
   cargarTiposFiltro().then(() => cargarDocumentos());
 });

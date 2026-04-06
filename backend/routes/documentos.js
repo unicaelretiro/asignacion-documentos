@@ -33,6 +33,7 @@ router.get('/', async (req, res) => {
       SELECT 
         d.id_documento,
         d.numero,
+        d.id_tipo_documento,
         td.nombre AS tipo_documento,
         d.asignado_a,
         u.nombre AS asignado_por,
