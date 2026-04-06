@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   async function cargarDocumentos() {
     try {
-      const res = await fetch('http://localhost:3000/api/documentos');
+      const res = await fetch('http://asignacion-documentos-production.up.railway.app/api/documentos');
       const documentos = await res.json();
 
       const tbody = document.getElementById('tablaDocumentos');

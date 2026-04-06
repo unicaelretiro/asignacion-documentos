@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Cargar usuarios para el select del modal
   async function cargarUsuarios() {
     try {
-      const res = await fetch('http://localhost:3000/api/usuarios');
+      const res = await fetch('http://asignacion-documentos-production.up.railway.app/api/usuarios');
       const usuarios = await res.json();
       const select = document.getElementById('editAsignadoA');
       
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Editar documento
   async function editarDocumento(idDocumento) {
     try {
-      const res = await fetch(`http://localhost:3000/api/documentos/${idDocumento}`);
+      const res = await fetch(`http://asignacion-documentos-production.up.railway.app/api/documentos/${idDocumento}`);
       const documento = await res.json();
 
       document.getElementById('editIdDocumento').value = documento.id_documento;
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
     submitBtn.textContent = 'Guardando...';
 
     try {
-      const res = await fetch(`http://localhost:3000/api/documentos/${idDocumento}`, {
+      const res = await fetch(`http://asignacion-documentos-production.up.railway.app/api/documentos/${idDocumento}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     try {
-      const res = await fetch(`http://localhost:3000/api/documentos/${idDocumento}`, {
+      const res = await fetch(`http://asignacion-documentos-production.up.railway.app/api/documentos/${idDocumento}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   async function cargarDocumentos() {
     try {
-      const res = await fetch('http://localhost:3000/api/documentos');
+      const res = await fetch('http://asignacion-documentos-production.up.railway.app/api/documentos');
       const documentos = await res.json();
 
       const tbody = document.getElementById('tablaDocumentos');
