@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Cargar tipos de documento
   async function cargarTipos() {
     try {
-      const res = await fetch('http://asignacion-documentos-production.up.railway.app/api/documentos/tipos');
+      const res = await fetch('https://asignacion-documentos-production.up.railway.app/api/documentos/tipos');
       const tipos = await res.json();
 
       const select = document.getElementById('tipoDocumento');
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Cargar usuarios
   async function cargarUsuarios() {
     try {
-      const res = await fetch('http://asignacion-documentos-production.up.railway.app/api/usuarios');
+      const res = await fetch('https://asignacion-documentos-production.up.railway.app/api/usuarios');
       const usuarios = await res.json();
 
       const select = document.getElementById('asignadoA');
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
     resultado.innerHTML = '';
 
     try {
-      const res = await fetch('http://asignacion-documentos-production.up.railway.app/api/documentos/asignar', {
+      const res = await fetch('https://asignacion-documentos-production.up.railway.app/api/documentos/asignar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

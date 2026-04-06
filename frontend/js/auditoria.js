@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   async function cargarAuditoria() {
     try {
-      const res = await fetch('http://asignacion-documentos-production.up.railway.app/api/auditoria?es_admin=true');
+      const res = await fetch('https://asignacion-documentos-production.up.railway.app/api/auditoria?es_admin=true');
       
       if (!res.ok) {
         throw new Error('Error al cargar auditoría');
