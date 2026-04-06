@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parametrizar numeración</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <div class="container">
+    <h2>Parametrizar numeración</h2>
+    <p style="margin-bottom: 8px; color: #6b7280;">
+      Indique el <strong>último número asignado manualmente</strong> para cada tipo (antes de usar esta aplicación).
+      La próxima asignación será ese número + 1. Los tipos nuevos que agregue en la base de datos aparecerán aquí.
+    </p>
+    <p style="margin-bottom: 24px; font-size: 14px; color: #9ca3af;">
+      Si deja 0 y aún no hay fila de numeración, el primer documento será el 1. Tras guardar un valor, el siguiente uso de «Asignar» incrementará desde ahí.
+    </p>
+
+    <div id="mensajeGlobal"></div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Tipo de documento</th>
+            <th>Último N° asignado</th>
+            <th>Máx. en documentos</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tablaParametros">
+          <tr>
+            <td colspan="4" style="text-align: center; padding: 40px; color: #6b7280;">
+              <span class="loading loading-dark"></span> Cargando…
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="js/navigation.js"></script>
+  <script src="components/navbar.js"></script>
+  <script src="js/parametrizar.js"></script>
+</body>
+</html>

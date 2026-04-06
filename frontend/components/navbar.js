@@ -4,6 +4,16 @@ function cargarNavbar() {
 
   const usuario = JSON.parse(localStorage.getItem('usuario'));
   const nombreUsuario = usuario ? usuario.nombre : 'Usuario';
+  const esAdmin =
+    usuario &&
+    (usuario.es_admin === true ||
+      usuario.es_admin === 'true' ||
+      usuario.es_admin === 't' ||
+      usuario.es_admin === 1 ||
+      usuario.es_admin === '1');
+  const btnParametrizar = esAdmin
+    ? '<button class="nav-btn" data-href="parametrizar.html">Parametrizar</button>'
+    : '';
 
   nav.innerHTML = `
     <div class="navbar">
@@ -13,6 +23,7 @@ function cargarNavbar() {
           <button class="nav-btn" data-href="dashboard.html">Inicio</button>
           <button class="nav-btn" data-href="asignar.html">Asignar</button>
           <button class="nav-btn" data-href="documentos.html">Documentos</button>
+          ${btnParametrizar}
           <button class="nav-btn" data-href="auditoria.html">Auditoría</button>
         </div>
         <div class="navbar-user">

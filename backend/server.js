@@ -21,6 +21,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/documentos', require('./routes/documentos'));
 app.use('/api/usuarios', require('./routes/usuarios'));
 app.use('/api/auditoria', require('./routes/auditoria'));
+app.use('/api/parametrizacion', require('./routes/parametrizacion'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
