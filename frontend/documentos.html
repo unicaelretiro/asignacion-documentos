@@ -12,7 +12,14 @@
 
   <div class="container">
     <h2>Documentos asignados</h2>
-    <p style="margin-bottom: 24px; color: #6b7280;">Lista completa de documentos asignados en el sistema.</p>
+    <p style="margin-bottom: 16px; color: #6b7280;">Lista completa de documentos asignados en el sistema.</p>
+
+    <div class="form-row" style="margin-bottom: 24px; max-width: 420px;">
+      <label for="filtroTipoDocumento" style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151;">Tipo de documento</label>
+      <select id="filtroTipoDocumento" style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #d1d5db; font-size: 1rem;">
+        <option value="">Todos los tipos</option>
+      </select>
+    </div>
 
     <div class="table-wrapper">
     <table>

@@ -17,10 +17,19 @@ router.post('/asignar', async (req, res) => {
   }
 });
 
-// Obtener todos los documentos
+// Obtener todos los documentos (opcional: ?id_tipo_documento=N)
 router.get('/', async (req, res) => {
   try {
-    const result = await db.query(`
+    const rawTipo = req.query.id_tipo_documento;
+    let idTipo = null;
+    if (rawTipo !== undefined && rawTipo !== null && String(rawTipo).trim() !== '') {
+      idTipo = parseInt(String(rawTipo), 10);
+      if (Number.isNaN(idTipo)) {
+        return res.status(400).json({ error: 'id_tipo_documento inválido' });
+      }
+    }
+
+    const sql = `
       SELECT 
         d.id_documento,
         d.numero,
@@ -33,8 +42,14 @@ router.get('/', async (req, res) => {
         ON td.id_tipo_documento = d.id_tipo_documento
       JOIN usuarios u 
         ON u.id_usuario = d.asignado_por
+      ${idTipo !== null ? 'WHERE d.id_tipo_documento = $1' : ''}
       ORDER BY d.asignado_en DESC
-    `);
+    `;
+
+    const result =
+      idTipo !== null
+        ? await db.query(sql, [idTipo])
+        : await db.query(sql);
 
     res.json(result.rows);
   } catch (error) {

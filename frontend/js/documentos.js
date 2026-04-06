@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
+  const API_BASE = 'https://asignacion-documentos-production.up.railway.app';
+
   const usuario = JSON.parse(localStorage.getItem('usuario'));
 
   if (!usuario) {
@@ -29,10 +31,45 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
+  async function cargarTiposFiltro() {
+    const select = document.getElementById('filtroTipoDocumento');
+    if (!select) return;
+
+    const valorActual = select.value;
+    try {
+      const res = await fetch(`${API_BASE}/api/documentos/tipos`);
+      const tipos = await res.json();
+
+      select.innerHTML = '<option value="">Todos los tipos</option>';
+      tipos.forEach((t) => {
+        const option = document.createElement('option');
+        option.value = t.id_tipo_documento;
+        option.textContent = t.nombre;
+        select.appendChild(option);
+      });
+
+      if (valorActual) {
+        select.value = valorActual;
+      }
+    } catch (error) {
+      console.error('Error al cargar tipos de documento:', error);
+    }
+  }
+
+  function urlListaDocumentos() {
+    const select = document.getElementById('filtroTipoDocumento');
+    const idTipo = select && select.value;
+    let url = `${API_BASE}/api/documentos`;
+    if (idTipo) {
+      url += `?id_tipo_documento=${encodeURIComponent(idTipo)}`;
+    }
+    return url;
+  }
+
   // Cargar usuarios para el select del modal
   async function cargarUsuarios() {
     try {
-      const res = await fetch('https://asignacion-documentos-production.up.railway.app/api/usuarios');
+      const res = await fetch(`${API_BASE}/api/usuarios`);
       const usuarios = await res.json();
       const select = document.getElementById('editAsignadoA');
       
@@ -76,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Editar documento
   async function editarDocumento(idDocumento) {
     try {
-      const res = await fetch(`https://asignacion-documentos-production.up.railway.app/api/documentos/${idDocumento}`);
+      const res = await fetch(`${API_BASE}/api/documentos/${idDocumento}`);
       const documento = await res.json();
 
       document.getElementById('editIdDocumento').value = documento.id_documento;
@@ -111,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
     submitBtn.textContent = 'Guardando...';
 
     try {
-      const res = await fetch(`https://asignacion-documentos-production.up.railway.app/api/documentos/${idDocumento}`, {
+      const res = await fetch(`${API_BASE}/api/documentos/${idDocumento}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -148,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     try {
-      const res = await fetch(`https://asignacion-documentos-production.up.railway.app/api/documentos/${idDocumento}`, {
+      const res = await fetch(`${API_BASE}/api/documentos/${idDocumento}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -172,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   async function cargarDocumentos() {
     try {
-      const res = await fetch('https://asignacion-documentos-production.up.railway.app/api/documentos');
+      const res = await fetch(urlListaDocumentos());
       const documentos = await res.json();
 
       const tbody = document.getElementById('tablaDocumentos');
@@ -182,7 +219,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
       if (documentos.length === 0) {
         const colspan = esAdmin ? 6 : 5;
-        tbody.innerHTML = `<tr><td colspan="${colspan}" style="text-align: center; padding: 40px; color: #6b7280;">No hay documentos asignados aún</td></tr>`;
+        const filtro = document.getElementById('filtroTipoDocumento');
+        const hayFiltro = filtro && filtro.value;
+        const mensajeVacio = hayFiltro
+          ? 'No hay documentos de este tipo'
+          : 'No hay documentos asignados aún';
+        tbody.innerHTML = `<tr><td colspan="${colspan}" style="text-align: center; padding: 40px; color: #6b7280;">${mensajeVacio}</td></tr>`;
         return;
       }
 
@@ -224,5 +266,7 @@ document.addEventListener('DOMContentLoaded', function() {
   window.editarDoc = editarDocumento;
   window.eliminarDoc = eliminarDocumento;
 
-  cargarDocumentos();
+  document.getElementById('filtroTipoDocumento')?.addEventListener('change', cargarDocumentos);
+
+  cargarTiposFiltro().then(() => cargarDocumentos());
 });
